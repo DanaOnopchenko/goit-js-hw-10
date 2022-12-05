@@ -38,13 +38,14 @@ function onSearch(evt) {
                 return;
             }
             creatMarkupCard(countries)
-        }).catch(error => { 
-            Notify.failure(`Oops, there is no country with that name`);
-        }).finally(() => { 
-
         })
-               
-    
+        .catch(error => { 
+            Notify.failure(`Oops, there is no country with that name`);
+            console.log(error)
+        })
+        // .finally(() => { 
+
+        // }) 
 }
 
 function creatMarkupCard(arr) {
@@ -70,8 +71,8 @@ function creatMarkupList(arr) {
 }
   
 function clearMarkupList() {
-    refs.countryList.innerHTML = ''
+    refs.countryList.innerHTML = '';
 }
  function clearMarkupCard() {
-    refs.countryList.innerHTML = ''
+     refs.countryList.innerHTML = '';
 }   
