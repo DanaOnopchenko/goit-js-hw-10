@@ -9,7 +9,7 @@ const FILTER = `name,capital,population,flags,languages`;
 function fetchCountries(name) { 
     return fetch(`${BASE_URL}/name/${name}?fields=${FILTER}`)
         .then(resp => {
-            console.log(resp);
+            // console.log(resp);
             if (!resp.ok) {
                 throw new Error(resp.statusText);
             }

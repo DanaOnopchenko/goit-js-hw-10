@@ -20,8 +20,8 @@ function onSearch(evt) {
   clearMarkupList();
   clearMarkupCard();
     if (!nameCountry.length) { 
-        // clearMarkupList();
-        // clearMarkupCard();
+        clearMarkupList();
+        clearMarkupCard();
         // alert('поле пусте');
         return;
     }
@@ -34,9 +34,13 @@ function onSearch(evt) {
                 return;
             }
             else if (countries.length >= 2 && countries.length <= 10) { 
+                // clearMarkupList();
+                // clearMarkupList();
                 creatMarkupList(countries);
                 return;
             }
+            // clearMarkupCard();
+            // clearMarkupList();
             creatMarkupCard(countries)
         })
         .catch(error => { 
@@ -71,8 +75,8 @@ function creatMarkupList(arr) {
 }
   
 function clearMarkupList() {
-    refs.countryList.innerHTML = '';
+    refs.countryList.innerHTML ='';
 }
  function clearMarkupCard() {
-     refs.countryList.innerHTML = '';
+     refs.countryInfo.innerHTML ='';
 }   
