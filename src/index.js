@@ -1,18 +1,8 @@
 import './css/styles.css';
+import debounce from 'lodash.debounce';
+import { fetchCountries } from './js/fetchCountries';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-const DEBOUNCE_DELAY = 300;
-
-
-// fetch('https://restcountries.com/v3.1/name/Ukraine?fields=name,capital,population,flags,languages')
-//     .then(response => { 
-//         return response.json();
-//     }).
-//     then(country => { 
-//         console.log(country)
-//     })
-//     .catch(error => { 
-//         console.log(error);
-//     })
 
 const refs = {
     searchInput: document.querySelector('#search-box'),
@@ -20,24 +10,44 @@ const refs = {
     countryInfo: document.querySelector('.country-info')
 }
 
-const BASE_URL = 'https://restcountries.com/v3.1';
-const FILTER = `name,capital,population,flags,languages`;
 
-refs.searchInput.addEventListener('input', onSearch);
+const DEBOUNCE_DELAY = 300;
+
+refs.searchInput.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY) );
 
 function onSearch(evt) {
-    const nameCountry = evt.target.value;
-    if (!nameCountry) { 
-        alert('поле пусте');
-        return
+    const nameCountry = evt.target.value.trim();
+  clearMarkupList();
+  clearMarkupCard();
+    if (!nameCountry.length) { 
+        // clearMarkupList();
+        // clearMarkupCard();
+        // alert('поле пусте');
+        return;
     }
-    fetchCountries(nameCountry).then(country =>
-        
-        creatMarkup(country))
+    fetchCountries(nameCountry)
+        .then(countries => {
+            // console.log(country)
+
+            if (countries.length > 10) {
+                Notify.info(`Too many matches found. Please enter a more specific name.`);
+                return;
+            }
+            else if (countries.length >= 2 && countries.length <= 10) { 
+                creatMarkupList(countries);
+                return;
+            }
+            creatMarkupCard(countries)
+        }).catch(error => { 
+            Notify.failure(`Oops, there is no country with that name`);
+        }).finally(() => { 
+
+        })
+               
     
 }
 
-function creatMarkup(arr) {
+function creatMarkupCard(arr) {
     const markup = arr.map(({ name, flags, capital, population, languages}) => {
         return `<img src="${flags.svg}" alt="flags of ${name.official}" width= 30px/>
       <h1>${name.official}</h1>
@@ -50,20 +60,18 @@ function creatMarkup(arr) {
     refs.countryInfo.insertAdjacentHTML('beforeend', markup)
 }
    
-    
 
-
-
-function fetchCountries(name) { 
-    return fetch(`${BASE_URL}/name/${name}?fields=${FILTER}`)
-        .then(resp => {
-            console.log(resp);
-            if (!resp.ok) {
-                throw new Error(resp.statusText);
-            }
-            return resp.json();
-        }).then(data => {
-            return data
-        })
-      .catch(err => console.error(err))
+function creatMarkupList(arr) { 
+    const markup = arr.map(({ name, flags }) => {
+        return `<img src="${flags.svg}" alt="flags of ${name.official}" width= 30px/>
+      <p>${name.official}</p>`
+    }).join('');
+    refs.countryList.insertAdjacentHTML('beforeend', markup)
 }
+  
+function clearMarkupList() {
+    refs.countryList.innerHTML = ''
+}
+ function clearMarkupCard() {
+    refs.countryList.innerHTML = ''
+}   
