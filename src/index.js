@@ -54,12 +54,14 @@ function onSearch(evt) {
 
 function creatMarkupCard(arr) {
     const markup = arr.map(({ name, flags, capital, population, languages}) => {
-        return `<img src="${flags.svg}" alt="flags of ${name.official}" width= 30px/>
-      <h1>${name.official}</h1>
-      <ul>
-        <li>Capital: ${capital}</li>
-        <li>Population: ${population}</li>
-        <li>Languages: ${Object.values(languages).join(', ')}</li>
+        return `<div class="country-info__wrapper">
+        <img src="${flags.svg}" alt="flags of ${name.official}" width = 40px/>
+      <h1 class="country-info__title">${name.official}</h1>
+      </div>
+      <ul class="country-info__list">
+        <li class="country-info__item"><b>Capital:</b> ${capital}</li>
+        <li class="country-info__item"><b>Population:</b> ${population}</li>
+        <li class="country-info__item"><b>Languages:</b> ${Object.values(languages).join(', ')}</li>
       </ul>`
     }).join('');
     refs.countryInfo.insertAdjacentHTML('beforeend', markup)
@@ -68,8 +70,8 @@ function creatMarkupCard(arr) {
 
 function creatMarkupList(arr) { 
     const markup = arr.map(({ name, flags }) => {
-        return `<img src="${flags.svg}" alt="flags of ${name.official}" width= 30px/>
-      <p>${name.official}</p>`
+        return `<li class="country-list__item"><img src="${flags.svg}" alt="flags of ${name.official}" width = 30px/>
+      <h2 class="country-list__title">${name.official}</h2></li>`
     }).join('');
     refs.countryList.insertAdjacentHTML('beforeend', markup)
 }
